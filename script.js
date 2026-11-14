@@ -12,18 +12,82 @@
   let current = 'home';
   let navigating = false;
 
-  // メニューの開閉
+  // -------------------------
+  // DIGITAL CLOCK
+  // -------------------------
+
+  function updateClock() {
+    const now = new Date();
+
+    const time = new Intl.DateTimeFormat('ja-JP', {
+      timeZone: 'Asia/Tokyo',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).format(now);
+
+    const date = new Intl.DateTimeFormat('ja-JP', {
+      timeZone: 'Asia/Tokyo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(now).replaceAll('/', '.');
+
+    document.getElementById('clock').textContent = time;
+    document.getElementById('clockDate').textContent = date;
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+
+
+  // -------------------------
+  // RING MENU
+  // -------------------------
+
   function setMenu(open) {
     overlay.classList.toggle('open', open);
-    overlay.setAttribute('aria-hidden', String(!open));
-    trigger.setAttribute('aria-expanded', String(open));
+
+    overlay.setAttribute(
+      'aria-hidden',
+      String(!open)
+    );
+
+    trigger.setAttribute(
+      'aria-expanded',
+      String(open)
+    );
 
     menuLabel.textContent = open ? 'CLOSE' : 'MENU';
   }
 
-  // ページ遷移
-  function navigate(id) {
-    if (!pages.some(page => page.id === id) || navigating) {
+  trigger.addEventListener('click', () => {
+    setMenu(!overlay.classList.contains('open'));
+  });
+
+  close.addEventListener('click', () => {
+    setMenu(false);
+  });
+
+  // メニュー外をクリックして閉じる
+  overlay.addEventListener('click', event => {
+    if (event.target === overlay) {
+      setMenu(false);
+    }
+  });
+
+
+  // -------------------------
+  // PAGE TRANSITION
+  // -------------------------
+
+  function navigate(id, updateURL = true) {
+    if (!pages.some(page => page.id === id)) {
+      return;
+    }
+
+    if (navigating) {
       return;
     }
 
@@ -35,20 +99,29 @@
 
     navigating = true;
 
-    // ローディング開始
+    // ローディング画面を表示
+    loader.classList.remove('show');
+
+    // アニメーションを確実に再実行
+    void loader.offsetWidth;
+
     loader.classList.add('show');
     loader.setAttribute('aria-hidden', 'false');
 
+    // ローディング演出中にページを切り替える
     window.setTimeout(() => {
 
-      // ページ切り替え
+      // ページ表示を切り替える
       pages.forEach(page => {
-        page.classList.toggle('active', page.id === id);
+        page.classList.toggle(
+          'active',
+          page.id === id
+        );
       });
 
       current = id;
 
-      // メニューの選択状態
+      // メニューの選択状態を更新
       links.forEach(link => {
         const selected = link.dataset.page === id;
 
@@ -63,42 +136,36 @@
         }
       });
 
-      // URLのハッシュを更新
-      history.pushState({ page: id }, '', `#${id}`);
+      // URLを更新
+      if (updateURL) {
+        history.pushState(
+          { page: id },
+          '',
+          `#${id}`
+        );
+      }
 
-      // スクロール位置を先頭に戻す
-      window.scrollTo({
-        top: 0,
-        behavior: 'instant'
-      });
+      // ローディング画面を閉じる
+      window.setTimeout(() => {
+        loader.classList.remove('show');
 
-      // ローディング終了
-      loader.classList.remove('show');
-      loader.setAttribute('aria-hidden', 'true');
+        loader.setAttribute(
+          'aria-hidden',
+          'true'
+        );
 
-      navigating = false;
+        navigating = false;
+
+      }, 250);
 
     }, 850);
   }
 
-  // メニューボタン
-  trigger.addEventListener('click', () => {
-    setMenu(!overlay.classList.contains('open'));
-  });
 
-  // 閉じるボタン
-  close.addEventListener('click', () => {
-    setMenu(false);
-  });
+  // -------------------------
+  // PAGE LINKS
+  // -------------------------
 
-  // メニュー外をクリックして閉じる
-  overlay.addEventListener('click', event => {
-    if (event.target === overlay) {
-      setMenu(false);
-    }
-  });
-
-  // ページリンク
   links.forEach(link => {
     link.addEventListener('click', event => {
       const id = link.dataset.page;
@@ -106,40 +173,61 @@
       if (!id) return;
 
       event.preventDefault();
+
       navigate(id);
     });
   });
 
-  // Escapeキーで閉じる
+
+  // -------------------------
+  // BROWSER HISTORY
+  // -------------------------
+
+  window.addEventListener('popstate', () => {
+    const id = location.hash.slice(1) || 'home';
+
+    if (id !== current) {
+      navigate(id, false);
+    }
+  });
+
+
+  // -------------------------
+  // KEYBOARD
+  // -------------------------
+
   window.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
       setMenu(false);
     }
   });
 
-  // ブラウザの戻る・進む
-  window.addEventListener('popstate', () => {
-    const id = location.hash.slice(1) || 'home';
 
-    if (id === current) return;
+  // -------------------------
+  // INITIAL PAGE
+  // -------------------------
 
-    if (pages.some(page => page.id === id)) {
-      pages.forEach(page => {
-        page.classList.toggle('active', page.id === id);
-      });
-
-      current = id;
-    }
-  });
-
-  // 初期ページの判定
   const initial = location.hash.slice(1);
 
   if (pages.some(page => page.id === initial)) {
     pages.forEach(page => {
-      page.classList.toggle('active', page.id === initial);
+      page.classList.toggle(
+        'active',
+        page.id === initial
+      );
     });
 
     current = initial;
   }
+
+  // 初期ページのメニュー状態
+  links.forEach(link => {
+    if (link.classList.contains('ring-link')) {
+      link.classList.toggle(
+        'current',
+        link.dataset.page === current
+      );
+    }
+  });
+
 })();
