@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
+
 <body>
   <div class="grain"></div>
 
@@ -21,37 +22,40 @@
 
     <button class="menu-trigger" id="menuTrigger"
       aria-expanded="false" aria-controls="ringMenu">
-      <span class="dot"></span>
+      <span class="menu-icon"><i></i><i></i></span>
       <span id="menuLabel">MENU</span>
     </button>
   </header>
 
   <main>
+    <!-- HOME -->
     <section class="page active" id="home">
-      <div class="hero">
+      <div class="home-content">
         <div class="eyebrow">01 — A quiet digital space</div>
 
         <h1>Less,<br><span class="outline">but</span> better.</h1>
 
-        <div class="hero-bottom">
+        <div class="home-bottom">
           <p class="intro">
             余白を大切に、必要なものだけを丁寧に。<br>
             静けさの中に、確かな輪郭を持つデザインを。
           </p>
-          <div class="index-mark">
-            DESIGN WITH INTENTION / 001
+
+          <div class="clock">
+            <span class="clock-label">TOKYO / JAPAN</span>
+            <div class="clock-time" id="clock">00:00:00</div>
+            <span class="clock-date" id="clockDate">2026.01.01</span>
           </div>
         </div>
 
-        <hr class="rule">
-
         <div class="home-foot">
-          <span>SCROLL TO EXPLORE</span>
+          <span>DESIGN WITH INTENTION</span>
           <span>EST. MMXXVI</span>
         </div>
       </div>
     </section>
 
+    <!-- ABOUT -->
     <section class="page" id="about">
       <div class="section-head">
         <div>
@@ -66,7 +70,7 @@
 
       <div class="about-grid">
         <p class="large-copy">
-          美しさは、何かを足すことだけでは生まれません。<br>
+          美しさは、何かを足すことだけでは生まれません。
           本当に必要なものを見極め、余分なものを手放す。
           その先にある、静かで強い表現を探しています。
         </p>
@@ -94,6 +98,7 @@
       </div>
     </section>
 
+    <!-- WORKS -->
     <section class="page" id="work">
       <div class="section-head">
         <div>
@@ -112,16 +117,19 @@
           <span class="work-title">Quiet Objects</span>
           <span class="work-type">ART DIRECTION / 2026</span>
         </div>
+
         <div class="work-item">
           <span class="work-no">02</span>
           <span class="work-title">The Monochrome Journal</span>
           <span class="work-type">EDITORIAL / 2025</span>
         </div>
+
         <div class="work-item">
           <span class="work-no">03</span>
           <span class="work-title">Between Lines</span>
           <span class="work-type">WEB DESIGN / 2025</span>
         </div>
+
         <div class="work-item">
           <span class="work-no">04</span>
           <span class="work-title">Still / Form</span>
@@ -130,12 +138,14 @@
       </div>
     </section>
 
+    <!-- CONTACT -->
     <section class="page" id="contact">
       <div class="section-head">
         <div>
           <div class="eyebrow">04 — Get in touch</div>
           <h2>Contact.</h2>
         </div>
+
         <p class="section-note">
           Good things begin<br>
           with a conversation.
@@ -160,11 +170,10 @@
     <span>MADE WITH INTENTION.</span>
   </footer>
 
+  <!-- RING MENU -->
   <div class="ring-overlay" id="ringMenu" aria-hidden="true">
     <div class="ring-wrap">
-      <button class="ring-close" id="ringClose">
-        CLOSE ×
-      </button>
+      <button class="ring-close" id="ringClose">CLOSE ×</button>
 
       <div class="ring">
         <div class="ring-center">
@@ -191,11 +200,16 @@
     </div>
   </div>
 
+  <!-- LOADING -->
   <div class="loader" id="loader" aria-hidden="true">
-    <div class="loader-word">FORM</div>
-    <div class="loader-sub">A MOMENT OF CLARITY</div>
-    <div class="loader-line"></div>
+    <div class="loader-inner">
+      <div class="loader-word">FORM</div>
+      <div class="loader-sub">A MOMENT OF CLARITY</div>
+      <div class="loader-line">
+        <div class="loader-progress"></div>
+      </div>
+    </div>
   </div>
+
 </body>
 </html>
-
