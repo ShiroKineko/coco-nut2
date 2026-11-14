@@ -143,4 +143,3 @@
     current = initial;
   }
 })();
-
