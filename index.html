@@ -1,1 +1,201 @@
 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f5f2">
+  <title>FORM — A quiet digital space</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="grain"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#home" data-page="home">
+      FORM<span>STUDIO / 2026</span>
+    </a>
+
+    <div class="top-meta">INDEPENDENT DIGITAL STUDIO</div>
+
+    <button class="menu-trigger" id="menuTrigger"
+      aria-expanded="false" aria-controls="ringMenu">
+      <span class="dot"></span>
+      <span id="menuLabel">MENU</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="page active" id="home">
+      <div class="hero">
+        <div class="eyebrow">01 — A quiet digital space</div>
+
+        <h1>Less,<br><span class="outline">but</span> better.</h1>
+
+        <div class="hero-bottom">
+          <p class="intro">
+            余白を大切に、必要なものだけを丁寧に。<br>
+            静けさの中に、確かな輪郭を持つデザインを。
+          </p>
+          <div class="index-mark">
+            DESIGN WITH INTENTION / 001
+          </div>
+        </div>
+
+        <hr class="rule">
+
+        <div class="home-foot">
+          <span>SCROLL TO EXPLORE</span>
+          <span>EST. MMXXVI</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="about">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">02 — Philosophy</div>
+          <h2>About.</h2>
+        </div>
+        <p class="section-note">
+          A little less noise.<br>
+          A little more meaning.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <p class="large-copy">
+          美しさは、何かを足すことだけでは生まれません。<br>
+          本当に必要なものを見極め、余分なものを手放す。
+          その先にある、静かで強い表現を探しています。
+        </p>
+
+        <div>
+          <p class="small-copy">
+            FORMは、デザインとテクノロジーの間にある可能性を探る、
+            小さなデジタルスタジオです。
+            形、動き、言葉。そのひとつひとつに理由を持たせ、
+            心地よい体験へと整えていきます。
+          </p>
+
+          <div class="number-list">
+            <div class="number-row">
+              <span>01 / CLARITY</span><span>明快さ</span>
+            </div>
+            <div class="number-row">
+              <span>02 / BALANCE</span><span>均衡</span>
+            </div>
+            <div class="number-row">
+              <span>03 / DETAIL</span><span>細部</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="work">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">03 — Selected work</div>
+          <h2>Works.</h2>
+        </div>
+        <p class="section-note">
+          A selection of thoughts<br>
+          made visible.
+        </p>
+      </div>
+
+      <div class="work-list">
+        <div class="work-item">
+          <span class="work-no">01</span>
+          <span class="work-title">Quiet Objects</span>
+          <span class="work-type">ART DIRECTION / 2026</span>
+        </div>
+        <div class="work-item">
+          <span class="work-no">02</span>
+          <span class="work-title">The Monochrome Journal</span>
+          <span class="work-type">EDITORIAL / 2025</span>
+        </div>
+        <div class="work-item">
+          <span class="work-no">03</span>
+          <span class="work-title">Between Lines</span>
+          <span class="work-type">WEB DESIGN / 2025</span>
+        </div>
+        <div class="work-item">
+          <span class="work-no">04</span>
+          <span class="work-title">Still / Form</span>
+          <span class="work-type">IDENTITY / 2024</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="contact">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">04 — Get in touch</div>
+          <h2>Contact.</h2>
+        </div>
+        <p class="section-note">
+          Good things begin<br>
+          with a conversation.
+        </p>
+      </div>
+
+      <div class="contact-panel">
+        <div>
+          <div class="eyebrow">HAVE A PROJECT IN MIND?</div>
+          <h3>Let's make<br>something<br>meaningful.</h3>
+        </div>
+
+        <a class="mail-link" href="mailto:hello@example.com">
+          HELLO@EXAMPLE.COM ↗
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© FORM STUDIO</span>
+    <span>MADE WITH INTENTION.</span>
+  </footer>
+
+  <div class="ring-overlay" id="ringMenu" aria-hidden="true">
+    <div class="ring-wrap">
+      <button class="ring-close" id="ringClose">
+        CLOSE ×
+      </button>
+
+      <div class="ring">
+        <div class="ring-center">
+          <strong>FORM</strong>
+          <span>SELECT A PAGE</span>
+        </div>
+
+        <a href="#home" class="ring-link pos-home" data-page="home">
+          <b>01</b><small>HOME</small>
+        </a>
+
+        <a href="#about" class="ring-link pos-about" data-page="about">
+          <b>02</b><small>ABOUT</small>
+        </a>
+
+        <a href="#work" class="ring-link pos-work" data-page="work">
+          <b>03</b><small>WORKS</small>
+        </a>
+
+        <a href="#contact" class="ring-link pos-contact" data-page="contact">
+          <b>04</b><small>CONTACT</small>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-word">FORM</div>
+    <div class="loader-sub">A MOMENT OF CLARITY</div>
+    <div class="loader-line"></div>
+  </div>
+</body>
+</html>
+
