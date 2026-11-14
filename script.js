@@ -34,18 +34,32 @@ function buildRing(){
   const items = [{id:null,number:'00',title:'OVERVIEW'},...visibleRecords];
   items.forEach((item,index)=>{
     const angle = (index / count) * Math.PI * 2 - Math.PI/2;
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'ring-item';
-    button.dataset.id = item.id || 'home';
-    button.setAttribute('aria-label',item.id ? `${item.number} ${item.title}` : 'トップページ');
-    button.textContent = item.id ? item.number.slice(-2) : 'N';
-    button.style.setProperty('--x',`${Math.cos(angle)*radius}px`);
-    button.style.setProperty('--y',`${Math.sin(angle)*radius}px`);
-    button.addEventListener('click',()=>selectRecord(item.id));
-    ringItems.append(button);
+    const marker = document.createElement('div');
+    marker.className = 'ring-item';
+    marker.dataset.id = item.id || 'home';
+    marker.setAttribute('aria-label',item.id ? `${item.number} ${item.title}` : 'トップページ');
+    marker.textContent = item.id ? item.number.slice(-2) : 'N';
+    marker.style.setProperty('--x',`${Math.cos(angle)*radius}px`);
+    marker.style.setProperty('--y',`${Math.sin(angle)*radius}px`);
+    ringItems.append(marker);
   });
+  snapRingToCurrent();
   updateRingSelection();
+}
+
+function selectedRingIndex(){
+  const index = visibleRecords.findIndex(record=>record.id===currentId);
+  return index < 0 ? 0 : index + 1;
+}
+
+function snapRingToCurrent(){
+  const count = visibleRecords.length + 1;
+  const index = selectedRingIndex();
+  const baseAngle = (index / count) * Math.PI * 2 - Math.PI/2;
+  ringRotation = Math.PI - baseAngle;
+  ringItems.style.transition = 'transform .35s cubic-bezier(.2,.8,.2,1)';
+  ringItems.style.transform = `rotate(${ringRotation}rad)`;
+  window.setTimeout(()=>{ringItems.style.transition='transform .08s linear';},360);
 }
 
 function updateRingSelection(){
@@ -91,6 +105,7 @@ function selectRecord(id){
       <blockquote class="record-quote"><b>FIELD NOTE / 採録者の覚書</b>${escapeHTML(record.quote)}</blockquote>`;
   }
   updateRingSelection();
+  snapRingToCurrent();
   history.replaceState(null,'',currentId ? `#${currentId}` : '#home');
 }
 
@@ -129,7 +144,6 @@ function angleFromPointer(event){
   return Math.atan2(event.clientY-(rect.top+rect.height/2),event.clientX-(rect.left+rect.width/2));
 }
 ringStage.addEventListener('pointerdown',event=>{
-  if(event.target.closest('.ring-item')) return;
   dragState={pointerId:event.pointerId,lastAngle:angleFromPointer(event),moved:0};
   ringStage.classList.add('dragging');
   ringStage.setPointerCapture(event.pointerId);
@@ -150,20 +164,20 @@ function finishDrag(event){
   const moved=dragState.moved;
   dragState=null;
   ringStage.classList.remove('dragging');
-  if(moved>.22){
-    const step=(Math.PI*2)/(visibleRecords.length+1);
-    const turns=Math.max(1,Math.round(Math.abs(ringRotation)/step));
-    const direction=ringRotation>0?1:-1;
-    for(let i=0;i<Math.min(turns,visibleRecords.length+1);i++) rotateSelection(direction);
-    ringRotation=0;
-    ringItems.style.transform='rotate(0rad)';
+  if(moved>.035){
+    const count=visibleRecords.length+1;
+    const step=(Math.PI*2)/count;
+    const baseHome=-Math.PI/2;
+    const rawIndex=Math.round((((Math.PI-ringRotation)-baseHome)/(Math.PI*2))*count);
+    const index=((rawIndex%count)+count)%count;
+    const nextId=index===0 ? null : visibleRecords[index-1].id;
+    selectRecord(nextId);
   }
+  snapRingToCurrent();
 }
 ringStage.addEventListener('pointerup',finishDrag);
 ringStage.addEventListener('pointercancel',finishDrag);
 
-$('#ringPrev').addEventListener('click',()=>rotateSelection(-1));
-$('#ringNext').addEventListener('click',()=>rotateSelection(1));
 $('.featured-card').addEventListener('click',()=>selectRecord('lumen-sea'));
 $$('.category-button').forEach(button=>button.addEventListener('click',()=>{
   currentCategory=button.dataset.category;
@@ -174,8 +188,8 @@ searchInput.addEventListener('input',applyFilters);
 window.addEventListener('keydown',event=>{
   if(event.key==='/' && document.activeElement!==searchInput){event.preventDefault();searchInput.focus();}
   if(event.key==='Escape'){searchInput.blur();searchInput.value='';currentCategory='all';$$('.category-button').forEach(button=>button.classList.toggle('active',button.dataset.category==='all'));applyFilters();selectRecord(null);}
-  if(event.key==='ArrowRight') rotateSelection(1);
-  if(event.key==='ArrowLeft') rotateSelection(-1);
+  if(event.key==='ArrowRight'){rotateSelection(1);snapRingToCurrent();}
+  if(event.key==='ArrowLeft'){rotateSelection(-1);snapRingToCurrent();}
 });
 window.addEventListener('resize',()=>buildRing());
 window.addEventListener('hashchange',()=>{
